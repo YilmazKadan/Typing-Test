@@ -1,0 +1,54 @@
+*{
+	margin:0;
+	padding:0;
+}
+body{
+	background-color:#c8cfb4;
+}
+.satir{
+	border:2px solid black;
+	height:100px;
+	overflow:hidden;
+	
+}
+.container{
+	background-color:white;
+}
+.yazilar{
+	position: relative;
+	
+}
+.satir span{
+	font-size:30px;
+	margin-right:7px;
+}
+.giris{
+	
+	border:2px solid blue;
+	font-size:30px;
+}
+.arkaplan{
+	background-color:#1aa1e1;
+	color:white;
+}
+.dogru{
+	color:#008000;
+}
+.yanlis{
+	color:red;
+}
+.kelime{
+	float:left;
+
+}
+
+.yanlis_anlik{
+	background-color: #F00;
+}
+.giris_alani{
+	align-items: center;
+	
+}
+.saniye{
+	font-size:30px;
+}

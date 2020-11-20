@@ -1,0 +1,83 @@
+<html>
+<head>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap" rel="stylesheet">
+	<link rel = "stylesheet" type = "text/css" href = "https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<script type="text/javascript" src = "https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<link rel = "stylesheet" type = "text/css" href = "stil.css">
+	<meta charset = "utf8">
+	
+</head>
+<body>
+	<div class="container col-md-7" >
+		<div class="row satir" id = "satir">
+			<div id = "yazilar" class="row yazilar ">
+				<div id = "sutun" class = "col col-md-12 ">
+				</div>
+			</div>
+		</div>
+		
+		<div class="row giris_alani " id = "giris_alani">
+			<div class = "col col-md-8 p-0 ">
+				<input id = "giris" class = "giris form-control" type = "text" autocomplete="off" autofocus>
+			</div>
+			<div class = "col-md-2 p-0 m-0">
+				<button id = "gerisayim" class = "btn btn-primary saniye form-control">1:00</button>
+			</div>
+			<div class = "col-md-2  m-0">
+				<button class = "btn btn-primary saniye form-control">Yenile</button>
+			</div>
+		</div>
+		<div class="row justify-content-md-center mt-5" id = "sonuc_alani">
+			<div  class="col col-md-6">
+				
+				<div class="card" style="width: 26rem;min-height: 230px;">
+
+					<div class="card-body">
+						<h3 class="card-title">Tebrikler testi başarıyla bitirdiniz!</h3>
+						<div class="row">
+							<div class="col col-md-6">
+								<p  class="card-text">Tuş Vuruşu:</p>
+							</div>
+							<div class="col col-md-6">
+								(<span id="basilan_dogrutus" class="text-success">6</span>-<span id="basilan_yanlistus" class="text-danger">6</span>) <span style = "font-size:18px;" id="basilan_toplamtus">17</span>
+							</div>
+						</div>
+						<hr>
+						<div class="row">
+							<div class="col col-md-6">
+								<p id = "dogruluk" class="card-text">Doğruluk:</p>
+							</div>
+							<div class="col col-md-6">
+								<span style="font-size:26px;" id="dogrulukorani" class="text-dark"></span>
+							</div>
+						</div>
+						<hr>
+						<div class="row">
+							<div class="col col-md-6">
+								<p class="card-text">Doğru Kelime:</p>
+							</div>
+							<div class="col col-md-6">
+								<span style="font-size:20px;" id="dogrukelime" class="text-success"></span>
+							</div>
+						</div>
+						<hr>
+						<div class="row">
+							<div class="col col-md-6">
+								<p class="card-text">Yanlış Kelime:</p>
+							</div>
+							<div class="col col-md-6">
+								<span style="font-size:20px;" id="yanliskelime" class="text-danger">6</span>
+							</div>
+						</div>
+						<hr>
+						<a idhref="#" class="btn btn-primary">Tekrar Başla</a>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript" src = "js.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

@@ -2,7 +2,33 @@
 
 
 try{
-	
+	var hangisatir = 0;
+	var tekrar_basla = document.getElementById('tekrar_basla');
+	var yenile = document.getElementById('yenile');
+	var giris = document.getElementById('giris');
+	var dropdown = document.getElementById('dropdown');
+	var kelime = 0;//Bu değişken yazılmakta olan kelimeyi belirtir.
+	var anlikuzunluk_giris,anlik_uzunlukkelime,topdegeri=0,sayac_kontrol = 0;
+	var deger = document.getElementsByClassName('kelime');
+	var sonuc_alani = document.getElementById('sonuc_alani');
+	var satir = document.getElementById('satir');
+	var sutun = document.getElementById("sutun");
+	var giris_alani = document.getElementById('giris_alani');
+	var sonuc_basilan_toplamtus = document.getElementById('basilan_toplamtus');
+	var sonuc_yanliskelime = document.getElementById('yanliskelime');
+	var sonuc_dogrukelime = document.getElementById('dogrukelime');
+	var sonuc_basilan_dogrutus = document.getElementById('basilan_dogrutus');
+	var sonuc_basilan_yanlistus = document.getElementById('basilan_yanlistus');
+	var sonuc_dogrulukorani= document.getElementById('dogrulukorani');
+	var sonuc_dks = document.getElementById('sonuc_dks');
+	var basilan_yanlistus = 0;
+	var basilan_dogrutus = 0;
+	var dogru_kelime = 0;
+	var yanliskelime = 0;
+	var basilan_toplamtus = 0;
+	var dks = 0;
+	sonuc_alani.style.display = "none";
+	var sayac = 60;
 	var kelimeler= [
 	"muhammed","raşit","deli",
 	"ve","bir","olmak",
@@ -37,72 +63,83 @@ try{
 	"meclis","pazar","futbol",
 	"meslek","beyaz","siyah"
 	];
-	var hangisatir = 0;
-	function karistir(dizi) {//Kelime dizisinin elemanlarının karıştığı yer.
-		for (let i = dizi.length - 1; i > 0; i--) {
+	function degisken_sifirlama(){
+		hangisatir = 0;
+		kelime = 0;
+		anlik_uzunlukkelime = 0;
+		anlikuzunluk_giris = 0;
+		topdegeri = 0;
+		sayac_kontrol = 0;
+		basilan_yanlistus = 0;
+		basilan_dogrutus = 0;
+		dogru_kelime = 0;
+		yanliskelime = 0;
+		basilan_toplamtus = 0;
+		sayac = 60;
+		sonuc_alani.style.display = "none";
+		satir.style.display = "";
+		giris_alani.style.display = "";
+		dropdown.style.display = "";
+		giris.value = "";
+		giris.disabled = false;
+		giris.focus();
+		sutun.innerHTML = "";
+	}
+
+	
+	function metin_olustur(kelimeler){
+		//Kelime kelimelersinin elemanlarının karıştığı yer.
+		for (let i = kelimeler.length - 1; i > 0; i--) {
 			let j = Math.floor(Math.random() * (i + 1)); 
 
-			[dizi[i], dizi[j]] = [dizi[j], dizi[i]];
+			[kelimeler[i], kelimeler[j]] = [kelimeler[j], kelimeler[i]];
 		}
-	}
-	karistir(kelimeler);
+
 	//Kelimeleri yazdırma alanı.
 	for (var i = 0;i<kelimeler.length;i++){
 
 		var kelime_ekle = document.createElement("span");
 		kelime_ekle.classList.add("kelime");
 		kelime_ekle.innerHTML = kelimeler[i];
-		if (i == 0) {
+		if (i == 0) 
 			kelime_ekle.classList.add("arkaplan");
-		}
-		else{
-			
-		}
-		document.getElementById("sutun").appendChild(kelime_ekle);
 
-
-
-		
+		sutun.appendChild(kelime_ekle);
 
 	}
 	
-	var giris = document.getElementById('giris');
-	var kelime = 0;//Bu değişken yazılmakta olan kelimeyi belirtir.
-	var anlikuzunluk_giris,anlik_uzunlukkelime,topdegeri=0,sayac_kontrol = 0;
-	var deger = document.getElementsByClassName('kelime');
-	var sonuc_alani = document.getElementById('sonuc_alani');
-	var satir = document.getElementById('satir');
-	var giris_alani = document.getElementById('giris_alani');
-	var sonuc_basilan_toplamtus = document.getElementById('basilan_toplamtus');
-	var sonuc_yanliskelime = document.getElementById('yanliskelime');
-	var sonuc_dogrukelime = document.getElementById('dogrukelime');
-	var sonuc_basilan_dogrutus = document.getElementById('basilan_dogrutus');
-	var sonuc_basilan_yanlistus = document.getElementById('basilan_yanlistus');
-	var sonuc_dogrulukorani= document.getElementById('dogrulukorani');
-	var sonuc_dks = document.getElementById('dks');
-	var basilan_yanlistus = 0;
-	var basilan_dogrutus = 0;
-	var dogru_kelime = 0;
-	var yanliskelime = 0;
-	var basilan_toplamtus = 0;
-	var dks = 0;
-	sonuc_alani.style.display = "none";
+}
 
-	giris.addEventListener('keypress',fonksiyon);
 
+metin_olustur(kelimeler);
+
+//TEKRAR BAŞLATMA BUTONU
+tekrar_basla.addEventListener("click",function(){
+	degisken_sifirlama();
+	metin_olustur(kelimeler);
 	
-	function fonksiyon (event){
+});
+yenile.addEventListener("click",function(){
+	degisken_sifirlama();
+	metin_olustur(kelimeler);
+	
+});
+
+//TUŞ BASMA EVENTİ
+giris.addEventListener('keypress',fonksiyon);
+function fonksiyon (event){
 
 		//Sayaç başlama alanı
 		if (sayac_kontrol == 0) {
-			var sayac = 10;
+
 			var downloadTimer = setInterval(function(){
-				if(sayac < 0){
+				if(sayac -1 < 0){
 					clearInterval(downloadTimer);
 					giris.disabled = true;
 					sonuc_alani.style.display = "";
 					satir.style.display = "none";
 					giris_alani.style.display = "none";
+					dropdown.style.display = "none";
 					//Sonuçları yazdırma
 					basilan_toplamtus = basilan_dogrutus + basilan_yanlistus;
 					sonuc_basilan_toplamtus.innerHTML = basilan_toplamtus;
@@ -110,15 +147,16 @@ try{
 					sonuc_basilan_dogrutus.innerHTML = basilan_dogrutus;
 					sonuc_dogrukelime.innerHTML = dogru_kelime;
 					sonuc_yanliskelime.innerHTML = yanliskelime;
+					sonuc_dks.innerHTML = Math.floor((basilan_dogrutus/5)) +" DKS";
 					sonuc_dogrulukorani.innerHTML = "%"+parseInt((100 * basilan_dogrutus ) / basilan_toplamtus);
 
 
 				} else {
 					if (sayac <10) {
-						document.getElementById("gerisayim").innerHTML = "0:0" + sayac;
+						document.getElementById("gerisayim").innerHTML = "0:0" + (sayac-1);
 					}
 					else{
-						document.getElementById("gerisayim").innerHTML = "0:" + sayac;
+						document.getElementById("gerisayim").innerHTML = "0:" + (sayac-1);
 					}
 					
 				}
@@ -181,12 +219,10 @@ try{
 		if(giris.value == " " )
 			giris.value = "";
 
-	});
-
-		
-		
+	});		
 	}
-	
+
+
 }
 catch (mesaj){
 	alert(mesaj.message);

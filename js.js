@@ -8,7 +8,7 @@ try{
 	var giris = document.getElementById('giris');
 	var dropdown = document.getElementById('dropdown');
 	var kelime = 0;//Bu değişken yazılmakta olan kelimeyi belirtir.
-	var anlikuzunluk_giris,anlik_uzunlukkelime,topdegeri=0,sayac_kontrol = 0;
+	var anlikuzunluk_giris,anlik_uzunlukkelime,topdegeri=0,sayac_kontrol = true;
 	var deger = document.getElementsByClassName('kelime');
 	var sonuc_alani = document.getElementById('sonuc_alani');
 	var satir = document.getElementById('satir');
@@ -21,6 +21,9 @@ try{
 	var sonuc_basilan_yanlistus = document.getElementById('basilan_yanlistus');
 	var sonuc_dogrulukorani= document.getElementById('dogrulukorani');
 	var sonuc_dks = document.getElementById('sonuc_dks');
+	var gerisayim = document.getElementById("gerisayim");
+	var yazilar_alani = document.getElementById('yazilar');
+	var downloadTimer;
 	var basilan_yanlistus = 0;
 	var basilan_dogrutus = 0;
 	var dogru_kelime = 0;
@@ -69,7 +72,6 @@ try{
 		anlik_uzunlukkelime = 0;
 		anlikuzunluk_giris = 0;
 		topdegeri = 0;
-		sayac_kontrol = 0;
 		basilan_yanlistus = 0;
 		basilan_dogrutus = 0;
 		dogru_kelime = 0;
@@ -84,6 +86,10 @@ try{
 		giris.disabled = false;
 		giris.focus();
 		sutun.innerHTML = "";
+		yazilar_alani.style.top = 0;
+		gerisayim.innerText = "1:00"; 
+		sayac_kontrol = true;
+		clearInterval(downloadTimer);
 	}
 
 	
@@ -109,19 +115,26 @@ try{
 	}
 	
 }
+function oyun_olustur(){
+	degisken_sifirlama();
+	metin_olustur(kelimeler);
+}
 
+oyun_olustur();
+// F5 tuşu iptali 
+document.onkeydown = function(e) {
+  if (e.keyCode == 116) {	
+    e.preventDefault();
+    oyun_olustur();
+  }
 
-metin_olustur(kelimeler);
-
+}
 //TEKRAR BAŞLATMA BUTONU
 tekrar_basla.addEventListener("click",function(){
-	degisken_sifirlama();
-	metin_olustur(kelimeler);
-	
+	oyun_olustur();
 });
 yenile.addEventListener("click",function(){
-	degisken_sifirlama();
-	metin_olustur(kelimeler);
+	oyun_olustur();
 	
 });
 
@@ -130,16 +143,17 @@ giris.addEventListener('keypress',fonksiyon);
 function fonksiyon (event){
 
 		//Sayaç başlama alanı
-		if (sayac_kontrol == 0) {
+		if (sayac_kontrol) {
 
-			var downloadTimer = setInterval(function(){
-				if(sayac -1 < 0){
+			downloadTimer = setInterval(function(){
+				if(sayac -1 <= 0){
 					clearInterval(downloadTimer);
 					giris.disabled = true;
 					sonuc_alani.style.display = "";
 					satir.style.display = "none";
 					giris_alani.style.display = "none";
 					dropdown.style.display = "none";
+					gerisayim.innerHTML = "0:00"; 
 					//Sonuçları yazdırma
 					basilan_toplamtus = basilan_dogrutus + basilan_yanlistus;
 					sonuc_basilan_toplamtus.innerHTML = basilan_toplamtus;
@@ -153,17 +167,17 @@ function fonksiyon (event){
 
 				} else {
 					if (sayac <10) {
-						document.getElementById("gerisayim").innerHTML = "0:0" + (sayac-1);
+						gerisayim.innerHTML = "0:0" + (sayac-1);
 					}
 					else{
-						document.getElementById("gerisayim").innerHTML = "0:" + (sayac-1);
+						gerisayim.innerHTML = "0:" + (sayac-1);
 					}
 					
 				}
 				sayac -= 1;
 			}, 1000);
 		}
-		sayac_kontrol++;
+		sayac_kontrol = false;
 		//Sayaç alanı bitiş
 		var basilantus = event.which || event.keyCode;
 		if(giris.value.trim() != "" ){//Giriş alanı boş değilse çalışacak kodlar.
@@ -190,7 +204,7 @@ function fonksiyon (event){
 					var satir_yuksekligi = window.getComputedStyle(deger[kelime]);
 					topdegeri += (-1)*parseInt(satir_yuksekligi.getPropertyValue("line-height"));
 					hangisatir = deger[kelime].offsetTop;
-					document.getElementById('yazilar').style.top = topdegeri;
+					yazilar_alani.style.top = topdegeri;
 
 				}				
 				
@@ -218,11 +232,8 @@ function fonksiyon (event){
 		//Anlik kontrol alanı son
 		if(giris.value == " " )
 			giris.value = "";
-
 	});		
 	}
-
-
 }
 catch (mesaj){
 	alert(mesaj.message);

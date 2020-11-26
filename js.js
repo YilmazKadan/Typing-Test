@@ -6,9 +6,9 @@ try{
 	var tekrar_basla = document.getElementById('tekrar_basla');
 	var yenile = document.getElementById('yenile');
 	var giris = document.getElementById('giris');
-	var dropdown = document.getElementById('dropdown');
+	var kelime_turu = document.getElementById('kelime_turu');
 	var kelime = 0;//Bu değişken yazılmakta olan kelimeyi belirtir.
-	var anlikuzunluk_giris,anlik_uzunlukkelime,topdegeri=0,sayac_kontrol = true;
+	var anlikuzunluk_giris = 0,anlik_uzunlukkelime,topdegeri=0,sayac_kontrol = true;
 	var deger = document.getElementsByClassName('kelime');
 	var sonuc_alani = document.getElementById('sonuc_alani');
 	var satir = document.getElementById('satir');
@@ -23,6 +23,9 @@ try{
 	var sonuc_dks = document.getElementById('sonuc_dks');
 	var gerisayim = document.getElementById("gerisayim");
 	var yazilar_alani = document.getElementById('yazilar');
+	var yukleme = document.getElementById('yukleme');
+	var kelime_tur_id = 0;
+	var f5kontrol = true;
 	var downloadTimer;
 	var basilan_yanlistus = 0;
 	var basilan_dogrutus = 0;
@@ -32,45 +35,35 @@ try{
 	var dks = 0;
 	sonuc_alani.style.display = "none";
 	var sayac = 60;
-	var kelimeler= [
-	"muhammed","raşit","deli",
-	"ve","bir","olmak",
-	"o","bu","için",
-	"gibi","yapmak","en",
-	"var","ne","ben",
-	"sonra","her","daha",
-	"yıl","ama","kendi",
-	"insan","almak","ise",
-	"zaman","gelmek","ki",
-	"iş","iki","değil",
-	"büyük","yeni","ilk",
-	"önce","vermek","büyük",
-	"gün","konu","son",
-	"taraf","yok","iyi",
-	"dünya","başkan","tüm",
-	"şey","aynı","önemli",
-	"karşı","ilgili","gerekmek",
-	"sizde","sizi","orta",
-	"diğer","sahip","sadece",
-	"düşünmedik","durum","geçmek",
-	"değil","kolay","bile",
-	"kimse","nasıl","kişi",
-	"fazla","tek","genel",
-	"kan","olay","kamu",
-	"amaç","düzenlemek","ticaret",
-	"polis","ulusal","üretim",
-	"hava","güçlü","birlik",
-	"arada","gerekli","eylül",
-	"kültür","mücadele","kalmak",
-	"önem","asla","uluslararası",
-	"meclis","pazar","futbol",
-	"meslek","beyaz","siyah"
-	];
+	var kelimeler;
+
+	function kelime_tur_sec(){
+		kelime_tur_id = document.getElementById('kelime_turu').value;
+		kelime_cek(kelime_tur_id);
+		oyun_olustur();
+	}
+
+	//AJAX İLE VERİ TABANINDAN KELİME SEÇME İŞLEMİ
+	function kelime_cek(id){
+		$.ajax(
+		{
+			type: "post",
+			url: 'Ajax/veri.php',
+			dataType:"json",
+			success: function (data){
+				var gelen_metin = data[id]['kelime_icerik'];
+				console.log(id);
+				kelimeler = gelen_metin.split(" ");
+			},
+		}
+		);
+	}
+	kelime_cek(kelime_tur_id);
+
+	//DEĞİŞKEN SIFIRLAMA FONKSİYONU
 	function degisken_sifirlama(){
 		hangisatir = 0;
 		kelime = 0;
-		anlik_uzunlukkelime = 0;
-		anlikuzunluk_giris = 0;
 		topdegeri = 0;
 		basilan_yanlistus = 0;
 		basilan_dogrutus = 0;
@@ -81,7 +74,7 @@ try{
 		sonuc_alani.style.display = "none";
 		satir.style.display = "";
 		giris_alani.style.display = "";
-		dropdown.style.display = "";
+		kelime_turu.style.display = "";
 		giris.value = "";
 		giris.disabled = false;
 		giris.focus();
@@ -89,10 +82,11 @@ try{
 		yazilar_alani.style.top = 0;
 		gerisayim.innerText = "1:00"; 
 		sayac_kontrol = true;
+		yukleme.style.display = "none";
 		clearInterval(downloadTimer);
 	}
 
-	
+	//METİN OLUŞTURMA FONKSİYONU
 	function metin_olustur(kelimeler){
 		//Kelime kelimelersinin elemanlarının karıştığı yer.
 		for (let i = kelimeler.length - 1; i > 0; i--) {
@@ -116,31 +110,37 @@ try{
 	
 }
 function oyun_olustur(){
-	degisken_sifirlama();
-	metin_olustur(kelimeler);
+	yukleme.style.display = "";
+	satir.style.display = "none";
+	sonuc_alani.style.display = "none";
+	setTimeout(function(){
+		degisken_sifirlama();
+		metin_olustur(kelimeler);
+	},200);
+	
 }
 
 oyun_olustur();
 // F5 tuşu iptali 
 document.onkeydown = function(e) {
-  if (e.keyCode == 116) {	
-    e.preventDefault();
-    oyun_olustur();
-  }
+	if (e.keyCode == 116) {	
+		e.preventDefault();
+		oyun_olustur();
+	}
 
 }
 //TEKRAR BAŞLATMA BUTONU
 tekrar_basla.addEventListener("click",function(){
 	oyun_olustur();
 });
+//YENİLEME BUTONU
 yenile.addEventListener("click",function(){
 	oyun_olustur();
 	
 });
 
 //TUŞ BASMA EVENTİ
-giris.addEventListener('keypress',fonksiyon);
-function fonksiyon (event){
+giris.addEventListener('keypress',function(event){
 
 		//Sayaç başlama alanı
 		if (sayac_kontrol) {
@@ -152,7 +152,7 @@ function fonksiyon (event){
 					sonuc_alani.style.display = "";
 					satir.style.display = "none";
 					giris_alani.style.display = "none";
-					dropdown.style.display = "none";
+					kelime_turu.style.display = "none";
 					gerisayim.innerHTML = "0:00"; 
 					//Sonuçları yazdırma
 					basilan_toplamtus = basilan_dogrutus + basilan_yanlistus;
@@ -163,8 +163,6 @@ function fonksiyon (event){
 					sonuc_yanliskelime.innerHTML = yanliskelime;
 					sonuc_dks.innerHTML = Math.floor((basilan_dogrutus/5)) +" DKS";
 					sonuc_dogrulukorani.innerHTML = "%"+parseInt((100 * basilan_dogrutus ) / basilan_toplamtus);
-
-
 				} else {
 					if (sayac <10) {
 						gerisayim.innerHTML = "0:0" + (sayac-1);
@@ -190,7 +188,7 @@ function fonksiyon (event){
 					deger[kelime].classList.add("dogru");
 					giris.value = "";
 					dogru_kelime++;
-					basilan_dogrutus += (deger[kelime].innerText.length +1);
+					basilan_dogrutus += (deger[kelime].innerText.length +1);//+1 boşluk hesabıdır.
 				}
 				else{
 					deger[kelime].classList.remove("arkaplan");
@@ -217,23 +215,23 @@ function fonksiyon (event){
 		}	
 		//Tuştan baskıyı çektiğimizde kalan boşluğu silme alanı.
 		giris.addEventListener('keyup',function(event){
-
 			//Anlik kontrol alanı
 			anlikuzunluk_giris = giris.value.length ;
-			anlik_uzunlukkelime = kelimeler[kelime].substr(0,anlikuzunluk_giris );
+			anlik_uzunlukkelime = deger[kelime].innerText.substr(0,anlikuzunluk_giris );
 			if(giris.value == anlik_uzunlukkelime)
 			{
 				deger[kelime].classList.remove("yanlis_anlik");		
 			}
 			else{
-				deger[kelime].classList.add("yanlis_anlik");		
+				deger[kelime].classList.add("yanlis_anlik");
 			}
 			
 		//Anlik kontrol alanı son
 		if(giris.value == " " )
 			giris.value = "";
 	});		
-	}
+	});
+
 }
 catch (mesaj){
 	alert(mesaj.message);

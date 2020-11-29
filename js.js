@@ -1,6 +1,3 @@
-
-
-
 try{
 	var hangisatir = 0;
 	var tekrar_basla = document.getElementById('tekrar_basla');
@@ -24,6 +21,9 @@ try{
 	var gerisayim = document.getElementById("gerisayim");
 	var yazilar_alani = document.getElementById('yazilar');
 	var yukleme = document.getElementById('yukleme');
+	var giris_btn = document.getElementById('giris_btn');
+	var cikis_btn = document.getElementById('cikis_btn');
+	var ses = document.getElementById('ses');
 	var kelime_tur_id = 0;
 	var f5kontrol = true;
 	var downloadTimer;
@@ -36,29 +36,44 @@ try{
 	sonuc_alani.style.display = "none";
 	var sayac = 60;
 	var kelimeler;
-
+	var gelen_metin;
+	cikis_btn.addEventListener("click",()=>{
+		Swal.fire({
+			position:'top-end',
+			title:'Çıkış Gerçekleşti!',
+			icon:'success'
+		}
+		);
+	});
+	//KELİME TÜR, DİL VS OLUŞTURMA ALANI SELECT NESNESİ ONCHANGE OLDUĞUNDA BURASI TETİKLENİYOR
 	function kelime_tur_sec(){
-		kelime_tur_id = document.getElementById('kelime_turu').value;
-		kelime_cek(kelime_tur_id);
+		kelime_tur_id = kelime_turu.value;
+		kelimeler = gelen_metin[kelime_tur_id]['kelime_icerik'].split(" ");
 		oyun_olustur();
 	}
 
 	//AJAX İLE VERİ TABANINDAN KELİME SEÇME İŞLEMİ
-	function kelime_cek(id){
+	//VERİ TABANINI YORMAMAK İÇİN BİR DEĞİŞKENE AKTARILIP PROGRAM İÇERİSİNDE O DEĞİŞKENDEN KELİME TÜRÜ SEÇİLİYOR
+	function kelime_cek(){
 		$.ajax(
 		{
 			type: "post",
 			url: 'Ajax/veri.php',
 			dataType:"json",
 			success: function (data){
-				var gelen_metin = data[id]['kelime_icerik'];
-				console.log(id);
-				kelimeler = gelen_metin.split(" ");
+				gelen_metin = data;
+				for (var i = 0 ; i<gelen_metin.length; i++){
+					var secenek = new Option (gelen_metin[i]['kelime_tur'],i);
+					kelime_turu.appendChild(secenek);
+				}
+				kelime_tur_id = kelime_turu.value;
+				kelimeler = gelen_metin[kelime_tur_id]['kelime_icerik'].split(" ");
 			},
 		}
 		);
 	}
-	kelime_cek(kelime_tur_id);
+	kelime_cek();
+	oyun_olustur();
 
 	//DEĞİŞKEN SIFIRLAMA FONKSİYONU
 	function degisken_sifirlama(){
@@ -100,13 +115,13 @@ try{
 
 		var kelime_ekle = document.createElement("span");
 		kelime_ekle.classList.add("kelime");
-		kelime_ekle.innerHTML = kelimeler[i];
-		if (i == 0) 
-			kelime_ekle.classList.add("arkaplan");
+		if (kelimeler[i].trim() != ""){ //BAZI KELİMELER VERİ TABANINDAN BOŞ GELİYORSA EKLEME
+			kelime_ekle.innerHTML = kelimeler[i];
+			sutun.appendChild(kelime_ekle);
 
-		sutun.appendChild(kelime_ekle);
-
+		}
 	}
+	$('#sutun span:first').addClass("arkaplan");
 	
 }
 function oyun_olustur(){
@@ -119,8 +134,6 @@ function oyun_olustur(){
 	},200);
 	
 }
-
-oyun_olustur();
 // F5 tuşu iptali 
 document.onkeydown = function(e) {
 	if (e.keyCode == 116) {	
@@ -141,7 +154,7 @@ yenile.addEventListener("click",function(){
 
 //TUŞ BASMA EVENTİ
 giris.addEventListener('keypress',function(event){
-
+	
 		//Sayaç başlama alanı
 		if (sayac_kontrol) {
 
@@ -203,12 +216,9 @@ giris.addEventListener('keypress',function(event){
 					topdegeri += (-1)*parseInt(satir_yuksekligi.getPropertyValue("line-height"));
 					hangisatir = deger[kelime].offsetTop;
 					yazilar_alani.style.top = topdegeri;
-
 				}				
-				
 				deger[kelime].classList.add("arkaplan");		
 			}
-
 		}
 		else{
 			giris.value = "";
@@ -225,18 +235,12 @@ giris.addEventListener('keypress',function(event){
 			else{
 				deger[kelime].classList.add("yanlis_anlik");
 			}
-			
 		//Anlik kontrol alanı son
 		if(giris.value == " " )
 			giris.value = "";
 	});		
 	});
-
 }
 catch (mesaj){
 	alert(mesaj.message);
 }
-
-
-
-

@@ -14,6 +14,9 @@ body{
 	padding-top:6px;
 	
 }
+#sonuc_alani{
+	display:none;
+}
 .yazilar{
 	position: relative;
 	

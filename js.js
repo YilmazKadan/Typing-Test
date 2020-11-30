@@ -23,6 +23,7 @@ try{
 	var yukleme = document.getElementById('yukleme');
 	var giris_btn = document.getElementById('giris_btn');
 	var cikis_btn = document.getElementById('cikis_btn');
+	var session = document.getElementById('session');
 	var ses = document.getElementById('ses');
 	var kelime_tur_id = 0;
 	var f5kontrol = true;
@@ -37,13 +38,17 @@ try{
 	var sayac = 60;
 	var kelimeler;
 	var gelen_metin;
+	if (session.value == "1") {
+		giris_btn.style.display = "none";
+	}
+	else{
+		cikis_btn.style.display = "none";
+	}
+	giris_btn.addEventListener("click",()=>{
+		giris_yap()
+	});
 	cikis_btn.addEventListener("click",()=>{
-		Swal.fire({
-			position:'top-end',
-			title:'Çıkış Gerçekleşti!',
-			icon:'success'
-		}
-		);
+		cikis_yap()
 	});
 	//KELİME TÜR, DİL VS OLUŞTURMA ALANI SELECT NESNESİ ONCHANGE OLDUĞUNDA BURASI TETİKLENİYOR
 	function kelime_tur_sec(){
@@ -60,6 +65,7 @@ try{
 			type: "post",
 			url: 'Ajax/veri.php',
 			dataType:"json",
+			data: {postisim:"kelime_cek"},
 			success: function (data){
 				gelen_metin = data;
 				for (var i = 0 ; i<gelen_metin.length; i++){
@@ -72,6 +78,54 @@ try{
 		}
 		);
 	}
+
+	function giris_yap(){
+		$.ajax({
+			type:"POST",
+			url:'Ajax/veri.php',
+			dataType:"json",
+			data:{postisim:"kullanici_giris",email:"kadan8080@gmail.com",sifre:"1234"},
+			success:function(data){
+				if (data.durum == "basarili") {
+					Swal.fire({
+						position:'top-end',
+						title:'Giris Başarılı!',
+						icon:'success'
+					}
+					);
+					//giris_btn.style.display = "none";
+					setTimeout(() =>{location.reload()},1000);
+				}
+
+			}
+
+		});
+	}
+
+	function cikis_yap(){
+		$.ajax({
+			type:"POST",
+			url:'Ajax/veri.php',
+			dataType:"json",
+			data:{postisim:"kullanici_cikis",email:"kadan8080@gmail.com",sifre:"1234"},
+			success:function(data){
+				if (data.durum == "basarili") {
+					Swal.fire({
+						position:'top-end',
+						title:'Çıkış Başarılı!',
+						icon:'success'
+					}
+					);
+					//giris_btn.style.display = "none";
+					setTimeout(() =>{location.reload()},1000);
+				}
+
+			}
+
+		});
+	}
+
+
 	kelime_cek();
 	oyun_olustur();
 

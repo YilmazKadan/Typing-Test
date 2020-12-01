@@ -4,13 +4,14 @@ if (isset($_SESSION['id'])) {
 	echo '<input type = "hidden" id = "session" value = "1">';
 }
 else {
-		echo '<input type = "hidden" id = "session" value = "0">';
+	echo '<input type = "hidden" id = "session" value = "0">';
 }
 
 
 ?>
 <html>
 <head>
+
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@100;400&display=swap" rel="stylesheet">
 	<!-- reference your copy Font Awesome here (from our CDN or by hosting yourself) -->
@@ -25,17 +26,41 @@ else {
 	<meta charset = "utf8">
 </head>
 <body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<a class="navbar-brand" href="#">Navbar</a>
+
+		<div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+			<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+				<li class="nav-item active">
+					<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">Link</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link disabled" href="#">Disabled</a>
+				</li>
+			</ul>
+			<form class="form-inline my-2 my-lg-0">
+				<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+				<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+			</form>
+		</div>
+	</nav>
 	<div class="container" >
 		<div class="row mt-5">
 			<div class="col col-md-12">
 				<div class="row mb-2 ">
 					<div class="col col-md-2 p-0">	
-						<select class="custom-select custom-select-lg mb-3 " id = "kelime_turu" onchange="kelime_tur_sec()">
+						<select class="custom-select form-control custom-select-lg mb-3 " id = "kelime_turu" onchange="kelime_tur_sec()">
 						</select>
 					</div>
 					<div class="col col-md-2 p-0 ">	
-						<button class="btn btn-primary"  id = "giris_btn">Giriş Yap</button>
-						<button class="btn btn-danger"  id = "cikis_btn">Çıkış Yap</button>
+						<button class="btn btn-primary btn-lg"  id = "giris_btn">Giriş Yap</button>
+						<button class="btn btn-danger btn-lg"  id = "cikis_btn">Çıkış Yap</button>
 						
 					</div>	
 				</div>
@@ -49,7 +74,7 @@ else {
 					</div>
 				</div>
 
-				<div class="row giris_alani mt-3 " id = "giris_alani">
+				<div class="row giris_alani mt-5 " id = "giris_alani">
 					<div class = "col col-md-8 p-0 ">
 						<input id = "giris" class = "giris form-control" type = "text" autocomplete="off" autofocus>
 					</div>
@@ -61,9 +86,8 @@ else {
 					</div>
 				</div>
 				<!--  SONUÇ ALANI !-->
-				<div class="row justify-content-md-center mt-5" id = "sonuc_alani">
-					<div  class="col col-md-6">
-
+				<div class="row  mt-5" id = "sonuc_alani">
+					<div  class="col col-md-6 ">
 						<div class="card shadow-lg" style="width: 26rem;min-height: 230px;">
 
 							<div class="card-body">
@@ -122,6 +146,6 @@ else {
 </html>
 <script src="jquery.js"></script>
 <script  src = "node_modules\sweetalert2\dist\sweetalert2.all.min.js"> </script>
-<script type="text/javascript" src = "js.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="Bootstrap/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="Bootstrap/js/bootstrap.min.js" ></script>
+<script type="text/javascript" src = "js.js"></script>

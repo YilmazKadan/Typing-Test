@@ -35,7 +35,7 @@ try{
 	var basilan_toplamtus = 0;
 	var dks = 0;
 	sonuc_alani.style.display = "none";
-	var sayac = 60;
+	var sayac = 5;
 	var kelimeler;
 	var gelen_metin;
 	if (session.value == "1") {
@@ -80,19 +80,61 @@ try{
 	}
 
 	function giris_yap(){
-		$.ajax({
-			type:"POST",
-			url:'Ajax/veri.php',
-			dataType:"json",
-			data:{postisim:"kullanici_giris",email:"kadan8080@gmail.com",sifre:"1234"},
-			success:function(data){
-				if (data.durum == "basarili") {
-					Swal.fire({
-						position:'top-end',
-						title:'Giris Başarılı!',
-						icon:'success'
-					}
-					);
+		Swal.fire({
+			title: 'GİRİŞ',
+			html: `<input type="text" id="login" class="swal2-input" placeholder="Username">
+			<input type="password" id="password" class="swal2-input" placeholder="Password">`,
+			confirmButtonText: 'Sign in',
+			focusConfirm: false,
+			preConfirm: () => {
+				const login = Swal.getPopup().querySelector('#login').value
+				const password = Swal.getPopup().querySelector('#password').value
+				if (!login || !password) {
+					Swal.showValidationMessage(`BOŞ ALAN BIRAKMAYINIZ`)
+				}
+				return { login: login, password: password }
+			}
+		}).then((result) => {
+			
+			$.ajax({
+				type:"POST",
+				url:'Ajax/veri.php',
+				dataType:"json",
+				data:{postisim:"kullanici_giris",email:result.value.login,sifre:result.value.password},
+				success:function(data){
+					if (data.durum == "basarili") {
+						Swal.fire({
+							position:'top-end',
+							title:'Giris Başarılı!',
+							icon:'success'
+						}
+						);
+					//giris_btn.style.display = "none";
+					setTimeout(() =>{location.reload()},1000);
+				}
+				else if (data.durum = "basarisiz"){
+						Swal.fire('Başarısız','Yanlış',"error");
+				}
+
+			}
+		})
+		})};
+
+
+		function cikis_yap(){
+			$.ajax({
+				type:"POST",
+				url:'Ajax/veri.php',
+				dataType:"json",
+				data:{postisim:"kullanici_cikis",email:"kadan8080@gmail.com",sifre:"1234"},
+				success:function(data){
+					if (data.durum == "basarili") {
+						Swal.fire({
+							position:'top-end',
+							title:'Çıkış Başarılı!',
+							icon:'success'
+						}
+						);
 					//giris_btn.style.display = "none";
 					setTimeout(() =>{location.reload()},1000);
 				}
@@ -100,34 +142,11 @@ try{
 			}
 
 		});
-	}
-
-	function cikis_yap(){
-		$.ajax({
-			type:"POST",
-			url:'Ajax/veri.php',
-			dataType:"json",
-			data:{postisim:"kullanici_cikis",email:"kadan8080@gmail.com",sifre:"1234"},
-			success:function(data){
-				if (data.durum == "basarili") {
-					Swal.fire({
-						position:'top-end',
-						title:'Çıkış Başarılı!',
-						icon:'success'
-					}
-					);
-					//giris_btn.style.display = "none";
-					setTimeout(() =>{location.reload()},1000);
-				}
-
-			}
-
-		});
-	}
+		}
 
 
-	kelime_cek();
-	oyun_olustur();
+		kelime_cek();
+		oyun_olustur();
 
 	//DEĞİŞKEN SIFIRLAMA FONKSİYONU
 	function degisken_sifirlama(){
@@ -139,7 +158,7 @@ try{
 		dogru_kelime = 0;
 		yanliskelime = 0;
 		basilan_toplamtus = 0;
-		sayac = 60;
+		sayac = 5;
 		sonuc_alani.style.display = "none";
 		satir.style.display = "";
 		giris_alani.style.display = "";
@@ -216,7 +235,7 @@ giris.addEventListener('keypress',function(event){
 				if(sayac -1 <= 0){
 					clearInterval(downloadTimer);
 					giris.disabled = true;
-					sonuc_alani.style.display = "";
+					sonuc_alani.style.display = "flex";
 					satir.style.display = "none";
 					giris_alani.style.display = "none";
 					kelime_turu.style.display = "none";

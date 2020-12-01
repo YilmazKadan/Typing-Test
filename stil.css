@@ -16,6 +16,7 @@ body{
 }
 #sonuc_alani{
 	display:none;
+	justify-content: center;
 }
 .yazilar{
 	position: relative;

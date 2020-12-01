@@ -14,8 +14,14 @@ if ($_POST['postisim'] == "kelime_cek") {
 
 }
 else if ($_POST['postisim'] == 'kullanici_giris'){
-	$sonuc['durum'] = "basarili";
-	$_SESSION['id'] = "10";
+	
+	if ($_POST['email'] == "kadan8080@gmail.com" and $_POST['sifre'] == "1234") {
+		$sonuc['durum'] = "basarili";
+		$_SESSION['id'] = "10";
+	}
+	else{
+		$sonuc['durum'] = "basarisiz";	
+	}
 	echo json_encode($sonuc);
 }
 else if ($_POST['postisim'] == 'kullanici_cikis'){

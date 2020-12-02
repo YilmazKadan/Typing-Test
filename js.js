@@ -23,7 +23,10 @@ try{
 	var yukleme = document.getElementById('yukleme');
 	var giris_btn = document.getElementById('giris_btn');
 	var cikis_btn = document.getElementById('cikis_btn');
-	var session = document.getElementById('session');
+	var giris_icon = document.getElementById('giris_icon');
+	var cikis_icon = document.getElementById('cikis_icon');
+	var kayit_icon = document.getElementById('kayit_icon');
+	var session_konrol = document.getElementById('session_kontrol');
 	var ses = document.getElementById('ses');
 	var kelime_tur_id = 0;
 	var f5kontrol = true;
@@ -38,11 +41,16 @@ try{
 	var sayac = 5;
 	var kelimeler;
 	var gelen_metin;
-	if (session.value == "1") {
+	//SESSİON KONTROL ALANI
+	if (session_konrol.value == "1") {
 		giris_btn.style.display = "none";
+		giris_icon.style.display = "none";
+		kayit_icon.style.display = "none";
 	}
 	else{
 		cikis_btn.style.display = "none";
+		cikis_icon.style.display = "none";
+
 	}
 	giris_btn.addEventListener("click",()=>{
 		giris_yap()
@@ -78,13 +86,96 @@ try{
 		}
 		);
 	}
+	//SONUÇ KAYDETME FONKSİYONU
+	function sonuc_kaydet(){
+		$.ajax({
+			type:"POST",
+			url:"Ajax/veri.php",
+			dataType:"json",
+			data:{postisim:"sonuc_kaydet",dks:Math.floor((basilan_dogrutus/5))},
+			success:function(data){
+				if (data.durum =="basarili") {
+					
+				}
+			},
+			error:function(xhr){
+				console.log(xhr.responseText);
+			}
+		});
+	}
+	//KAYIT OLMA FONKSİYONU
+	function kayit_ol(){
+		Swal.fire({
+			title:"KAYIT",
+			html:`
+			<input type='text' id = 'kayit_ad' class ='swal2-input' placeholder = 'İsim giriniz'>
+			<input type='text' id = 'kayit_soyad' class ='swal2-input' placeholder = 'Soyisim giriniz'>
+			<input type='email' required id = 'kayit_email' class ='swal2-input' placeholder = 'Email giriniz'>
+			<input type='password' id = 'kayit_sifre' class ='swal2-input' placeholder = 'Şifre giriniz'>
+			<input type='password' id = 'kayit_sifre_tekrar' class ='swal2-input' placeholder = 'Şifre tekrar giriniz'>
+			`,
+			confirmButtonText:"Kayıt Ol",
+			focusConfirm: false,
+			preConfirm: function(){
+				const kayit_ad = Swal.getPopup().querySelector('#kayit_ad').value;
+				const kayit_soyad = Swal.getPopup().querySelector('#kayit_soyad').value;
+				const kayit_email = Swal.getPopup().querySelector('#kayit_email').value;
+				const kayit_sifre = Swal.getPopup().querySelector('#kayit_sifre').value;
+				const kayit_sifre_tekrar = Swal.getPopup().querySelector('#kayit_sifre_tekrar').value;
 
+				if (!kayit_ad || !kayit_soyad || !kayit_email || !kayit_sifre || !kayit_sifre_tekrar) {
+					Swal.showValidationMessage('BOŞ ALAN BIRAKMAYINIZ');
+
+				}
+				else{
+					if (kayit_sifre == kayit_sifre_tekrar) {
+						var datam =  {
+							"kayit_ad" :kayit_ad,
+							"kayit_soyad" : kayit_soyad,
+							"kayit_email" : kayit_email,
+							"kayit_sifre" : kayit_sifre
+						};
+						$.ajax({
+							type:"POST",
+							dataType:"json",
+							url:"Ajax/veri.php",
+							data:{postisim:"kayit_ol",data:datam},
+							success:function(gelen){
+								if (gelen.durum == "basarili") {
+									Swal.fire("BAŞARILI","Başarıyla kayıt oldunuz","success");
+									
+								}
+								else{
+									Swal.fire("Başarısız",gelen.durum,"error").then((result) =>{
+										if (result.isConfirmed) {
+											kayit_ol();
+										}
+									});
+									
+								}
+								
+							},
+							error:function(){
+								Swal.fire("HATA","Kayıt Sırasında Hata Meydana Geldi","error");
+							}
+
+						});
+					}
+					else{
+						Swal.showValidationMessage('Şifreler Uyuşmuyor');
+					}
+				}
+				
+			}		  	
+		});
+	}
+	//GİRİŞ YAPMA FONKSİYONU
 	function giris_yap(){
 		Swal.fire({
 			title: 'GİRİŞ',
-			html: `<input type="text" id="login" class="swal2-input" placeholder="Username">
-			<input type="password" id="password" class="swal2-input" placeholder="Password">`,
-			confirmButtonText: 'Sign in',
+			html: `<input type="text" id="login" class="swal2-input" placeholder="Email">
+			<input type="password" id="password" class="swal2-input" placeholder="Şifre">`,
+			confirmButtonText: 'Giriş Yap',
 			focusConfirm: false,
 			preConfirm: () => {
 				const login = Swal.getPopup().querySelector('#login').value
@@ -106,21 +197,28 @@ try{
 						Swal.fire({
 							position:'top-end',
 							title:'Giris Başarılı!',
+							text:"Hoşgeldiniz " + data.uye_ad,	
 							icon:'success'
 						}
 						);
 					//giris_btn.style.display = "none";
 					setTimeout(() =>{location.reload()},1000);
 				}
-				else if (data.durum = "basarisiz"){
-						Swal.fire('Başarısız','Yanlış',"error");
+				else {
+					Swal.fire('Başarısız',data.durum,"error").then((result)=>{
+						giris_yap();
+					});
 				}
-
+			},
+			error:function(xhr,status,error){
+				Swal.fire('Başarısız','Bilinmeyen bir hata ile karşılaşıldı '+xhr.responseText,"error").then((result)=>{
+						giris_yap();
+					});
 			}
 		})
 		})};
 
-
+		//ÇIKIŞ YAPMA FONKSİYONU
 		function cikis_yap(){
 			$.ajax({
 				type:"POST",
@@ -158,7 +256,7 @@ try{
 		dogru_kelime = 0;
 		yanliskelime = 0;
 		basilan_toplamtus = 0;
-		sayac = 5;
+		sayac = 1;
 		sonuc_alani.style.display = "none";
 		satir.style.display = "";
 		giris_alani.style.display = "";
@@ -249,6 +347,7 @@ giris.addEventListener('keypress',function(event){
 					sonuc_yanliskelime.innerHTML = yanliskelime;
 					sonuc_dks.innerHTML = Math.floor((basilan_dogrutus/5)) +" DKS";
 					sonuc_dogrulukorani.innerHTML = "%"+parseInt((100 * basilan_dogrutus ) / basilan_toplamtus);
+					sonuc_kaydet();
 				} else {
 					if (sayac <10) {
 						gerisayim.innerHTML = "0:0" + (sayac-1);

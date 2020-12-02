@@ -1,13 +1,11 @@
 <?php session_start();
 
 if (isset($_SESSION['id'])) {
-	echo '<input type = "hidden" id = "session" value = "1">';
+	echo '<input style = "display:none;" id = "session_kontrol" value = "1">';
 }
 else {
-	echo '<input type = "hidden" id = "session" value = "0">';
+	echo '<input  style = "display:none;" id = "session_kontrol" value = "0">';
 }
-
-
 ?>
 <html>
 <head>
@@ -26,28 +24,27 @@ else {
 	<meta charset = "utf8">
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<nav class="navbar navbar-expand-lg navbar-light container" style="background-color:#e3f2fd;">
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
-		<a class="navbar-brand" href="#">Navbar</a>
+		<a class="navbar-brand" href="index.php">ON PARMAK YAZ</a>
 
 		<div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-			<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-				<li class="nav-item active">
-					<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+			<ul class="nav navbar-nav">
+				<li class="nav-item"><a href="" class="nav-link">Anasayfa</a></li>
+			</ul>
+			<ul class="nav  navbar-nav ml-auto ">
+				<li class="nav-item">
+					<a href="#" id="giris_icon" onclick="giris_yap();" class="nav-link"><span class="fas fa-user"></span>Giriş</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="#">Link</a>
+					<a href="#" id="kayit_icon" onclick="kayit_ol()" class="nav-link"><span class="fas fa-user"></span>Kayıt Ol</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link disabled" href="#">Disabled</a>
+					<a href="#"  id="cikis_icon" onclick = "cikis_yap()" class="nav-link"><span class="fas fa-sign-out-alt"></span>Çıkış</a>
 				</li>
 			</ul>
-			<form class="form-inline my-2 my-lg-0">
-				<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-				<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-			</form>
 		</div>
 	</nav>
 	<div class="container" >
@@ -139,6 +136,59 @@ else {
 					</div>
 				</div>
 				<!--  SONUÇ ALANI BİTİŞ !-->
+				<!-- SIRALAMA !-->
+					<div class="row mt-5">
+						<div class="col col-md-7" >
+							<h2>Son 24 saat klavye hızlı sıralaması</h2>
+						</div>
+					</div>
+					<div class="row ">
+						<div class="col-md-7">
+							<table class="table  table-info table-bordered table-striped">
+								<thead class="thead-dark">
+									<tr>
+										<th></th>
+										<th></th>
+										<th>Kullanıcı Adı</th>
+										<th>DKS</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>1.</td>
+										<td align="center"><img src="avatar.jpg" width="50"></td>
+										<td>Alper Gürbüz</td>
+										<td>120</td>
+									</tr>
+									<tr>
+										<td>2.</td>
+										<td align="center"><img src="avatar.jpg" width="50"></td>
+										<td>Yılmaz Kadan</td>
+										<td>80</td>
+									</tr>
+									<tr>
+										<td>3.</td>
+										<td align="center"><img src="avatar.jpg" width="50"></td>
+										<td>Hüseyin Doğan</td>
+										<td>75</td>
+									</tr>
+									<tr>
+										<td>4.</td>
+										<td align="center"><img src="avatar.jpg" width="50"></td>
+										<td>Mehmet Emin Koç</td>
+										<td>65</td>
+									</tr>
+									<tr>
+										<td>5.</td>
+										<td align="center"><img src="avatar.jpg" width="50"></td>
+										<td>Halil Kadan</td>
+										<td>45</td>
+									</tr>
+								</tbody>
+
+							</table>
+						</div>
+					</div>
 			</div>
 		</div>
 	</div>	

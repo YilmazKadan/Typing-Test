@@ -38,7 +38,7 @@ try{
 	var basilan_toplamtus = 0;
 	var dks = 0;
 	sonuc_alani.style.display = "none";
-	var sayac = 5;
+	var sayac = 60;
 	var kelimeler;
 	var gelen_metin;
 	//SESSİON KONTROL ALANI
@@ -212,8 +212,8 @@ try{
 			},
 			error:function(xhr,status,error){
 				Swal.fire('Başarısız','Bilinmeyen bir hata ile karşılaşıldı '+xhr.responseText,"error").then((result)=>{
-						giris_yap();
-					});
+					giris_yap();
+				});
 			}
 		})
 		})};
@@ -241,8 +241,6 @@ try{
 
 		});
 		}
-
-
 		kelime_cek();
 		oyun_olustur();
 
@@ -256,7 +254,7 @@ try{
 		dogru_kelime = 0;
 		yanliskelime = 0;
 		basilan_toplamtus = 0;
-		sayac = 1;
+		sayac = 5;
 		sonuc_alani.style.display = "none";
 		satir.style.display = "";
 		giris_alani.style.display = "";

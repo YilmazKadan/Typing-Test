@@ -1,8 +1,6 @@
 <?php
-
 session_start();
-
-$db = new PDO('mysql:host=localhost;dbname=test',"root","");
+require_once('../Fonksiyon/baglan.php');
 
 if ($_POST['postisim'] == "kelime_cek") {
 	$sorgu = $db->prepare('Select * from kelime');
@@ -36,24 +34,33 @@ else if ($_POST['postisim'] == 'kullanici_cikis'){
 	session_destroy();
 	echo json_encode($sonuc);
 }
+//SONUÇ KAYDETME FONKSİYONU
 else if($_POST['postisim']  == "sonuc_kaydet"){
 	if (isset($_SESSION['id'])) {
+		//BU KARMAŞA KISACA ŞUNU ANLATIYOR 
+		//EĞER OTURUM AÇIKSA KAYITLARA BAKIYOR DAHA ÖNCE TEST YAPILMAMIŞSA SONUCU EKLİYOR EĞER YAPILMIŞ İSE HANGİ SONUCUN DAHA BÜYÜK OLDUĞUNA BAKIYOR VE ONA GÖRE GÜNCELLEME İŞLEMLERİNİ YAPIYOR.
+		$tarih = date('Y.m.d H:i:s');
 		$dks = $_POST['dks'];
 		$dks_kullanici_id = $_SESSION['id'];
-		$kayit = $db->prepare("Insert into dks_liste set dks_kullanici_id = ? , dks_sonuc = ?");
-		$kayit->execute(array($dks_kullanici_id,$dks));
-		if ($kayit->rowCount()) {
-			$sonuc['durum'] = "basarili";
+		$sorgu = $db->query("select * from dks_liste where dks_kullanici_id = '$dks_kullanici_id'");
+		if ($sorgu->rowCount()) {
+			$sorgula = $db->query("Select * from dks_liste where dks_sonuc < '$dks' and dks_kullanici_id = '$dks_kullanici_id' ");
+			if ($sorgula->rowCount()) {
+				$update = $db->query("Update dks_liste set dks_sonuc = '$dks' , dks_tarih = '$tarih' , tekrar = tekrar + 1  where dks_kullanici_id = '$dks_kullanici_id'");
+			}
 		}
 		else{
-			$sonuc['durum'] = "Kayıt işlemi sırasında bir hata ile karşılaşıldı";
+
+			$kayit = $db->prepare("Insert into dks_liste set dks_kullanici_id = ? , dks_sonuc = ?");
+			$kayit->execute(array($dks_kullanici_id,$dks));
+			if ($kayit->rowCount()) {
+				$sonuc['durum'] = "basarili";
+			}
+			else{
+				$sonuc['durum'] = "Kayıt işlemi sırasında bir hata ile karşılaşıldı";
+			}
 		}
-		
 	}
-	else{
-		$sonuc['durum'] = "";
-	}
-	echo json_encode($sonuc);
 }
 else if ($_POST['postisim'] == "kayit_ol" ){
 

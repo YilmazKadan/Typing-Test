@@ -1,5 +1,6 @@
 <?php session_start();
-
+require_once("Fonksiyon/fonksiyon.php");
+require_once("Fonksiyon/baglan.php");
 if (isset($_SESSION['id'])) {
 	echo '<input style = "display:none;" id = "session_kontrol" value = "1">';
 }
@@ -137,65 +138,60 @@ else {
 				</div>
 				<!--  SONUÇ ALANI BİTİŞ !-->
 				<!-- SIRALAMA !-->
-					<div class="row mt-5">
-						<div class="col col-md-7" >
-							<h2>Son 24 saat klavye hızlı sıralaması</h2>
-						</div>
+				<div class="row mt-5">
+					<div class="col col-md-7" >
+						<h2>Son 24 saat klavye hızlı sıralaması</h2>
 					</div>
-					<div class="row ">
-						<div class="col-md-7">
-							<table class="table  table-info table-bordered table-striped">
-								<thead class="thead-dark">
-									<tr>
-										<th></th>
-										<th></th>
-										<th>Kullanıcı Adı</th>
-										<th>DKS</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>1.</td>
-										<td align="center"><img src="avatar.jpg" width="50"></td>
-										<td>Alper Gürbüz</td>
-										<td>120</td>
-									</tr>
-									<tr>
-										<td>2.</td>
-										<td align="center"><img src="avatar.jpg" width="50"></td>
-										<td>Yılmaz Kadan</td>
-										<td>80</td>
-									</tr>
-									<tr>
-										<td>3.</td>
-										<td align="center"><img src="avatar.jpg" width="50"></td>
-										<td>Hüseyin Doğan</td>
-										<td>75</td>
-									</tr>
-									<tr>
-										<td>4.</td>
-										<td align="center"><img src="avatar.jpg" width="50"></td>
-										<td>Mehmet Emin Koç</td>
-										<td>65</td>
-									</tr>
-									<tr>
-										<td>5.</td>
-										<td align="center"><img src="avatar.jpg" width="50"></td>
-										<td>Halil Kadan</td>
-										<td>45</td>
-									</tr>
-								</tbody>
+				</div>
+				<div class="row " id="sonuc_tablosu">
+					<div class="col-md-7" >
+						<table class="table  table-info table-bordered table-striped">
+							<thead class="thead-dark">
+								<tr>
+									<th>#</th>
+									<th>#</th>
+									<th>Kullanıcı Adı</th>
+									<th>DKS</th>
+									<th>Test Zamanı</th>
+									<th>Kaçıncı Deneme</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php
+								$sayac = 1;
+								$sorgu = $db->query("Select *  from 
+									dks_liste INNER JOIN kullanici ON 
+									dks_liste.dks_kullanici_id = kullanici.kullanici_id
 
+									order by  dks_sonuc DESC",PDO::FETCH_ASSOC);
+								foreach ($sorgu as $gelen){
+									$gecen_sure = saat_farki($gelen['dks_tarih']);
+									
+									?>
+									<tr <?php if (isset($_SESSION['id'])) {
+										if ($_SESSION['id'] == $gelen['kullanici_id']) {
+											echo 'class = "table-warning"';
+										}
+									} ?>>
+										<td><?php echo $sayac ?></td>
+										<td align="center"><img src="avatar.jpg" width="50"></td>
+										<td><?php echo $gelen['kullanici_adi'] ?></td>
+										<td><?php echo $gelen['dks_sonuc'] ?></td>
+										<td><?php surefarkyaz($gecen_sure); ?></td>
+										<td><?php echo $gelen['tekrar'].".Deneme" ?></td>
+									</tr>
+									<?php $sayac++; } ?>
+								</tbody>
 							</table>
 						</div>
 					</div>
+				</div>
 			</div>
-		</div>
-	</div>	
-</body>
-</html>
-<script src="jquery.js"></script>
-<script  src = "node_modules\sweetalert2\dist\sweetalert2.all.min.js"> </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="Bootstrap/js/bootstrap.min.js" ></script>
-<script type="text/javascript" src = "js.js"></script>
+		</div>	
+	</body>
+	</html>
+	<script src="jquery.js"></script>
+	<script  src = "node_modules\sweetalert2\dist\sweetalert2.all.min.js"> </script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="Bootstrap/js/bootstrap.min.js" ></script>
+	<script type="text/javascript" src = "js.js"></script>

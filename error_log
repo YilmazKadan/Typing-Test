@@ -1,0 +1,15 @@
+[02-Dec-2020 21:24:55 Europe/Istanbul] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000] [1044] Access denied for user 'teknoderya_test'@'localhost' to database 'teknoderya_test' in /ssd2/teknoderya/public_html/10parmak/Ajax/veri.php:5
+Stack trace:
+#0 /ssd2/teknoderya/public_html/10parmak/Ajax/veri.php(5): PDO->__construct('mysql:host=loca...', 'teknoderya_test', 'Aa@05358793579')
+#1 {main}
+  thrown in /ssd2/teknoderya/public_html/10parmak/Ajax/veri.php on line 5
+[02-Dec-2020 21:25:05 Europe/Istanbul] PHP Fatal error:  Uncaught PDOException: SQLSTATE[42000] [1044] Access denied for user 'teknoderya_test'@'localhost' to database 'teknoderya_test' in /ssd2/teknoderya/public_html/10parmak/Ajax/veri.php:5
+Stack trace:
+#0 /ssd2/teknoderya/public_html/10parmak/Ajax/veri.php(5): PDO->__construct('mysql:host=loca...', 'teknoderya_test', 'Aa@05358793579')
+#1 {main}
+  thrown in /ssd2/teknoderya/public_html/10parmak/Ajax/veri.php on line 5
+[02-Dec-2020 21:37:54 Europe/Istanbul] PHP Notice:  Undefined index: postisim in /ssd2/teknoderya/public_html/10parmak/Ajax/veri.php on line 12
+[02-Dec-2020 21:37:54 Europe/Istanbul] PHP Notice:  Undefined index: postisim in /ssd2/teknoderya/public_html/10parmak/Ajax/veri.php on line 21
+[02-Dec-2020 21:37:54 Europe/Istanbul] PHP Notice:  Undefined index: postisim in /ssd2/teknoderya/public_html/10parmak/Ajax/veri.php on line 39
+[02-Dec-2020 21:37:54 Europe/Istanbul] PHP Notice:  Undefined index: postisim in /ssd2/teknoderya/public_html/10parmak/Ajax/veri.php on line 44
+[02-Dec-2020 21:37:54 Europe/Istanbul] PHP Notice:  Undefined index: postisim in /ssd2/teknoderya/public_html/10parmak/Ajax/veri.php on line 63

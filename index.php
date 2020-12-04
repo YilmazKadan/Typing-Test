@@ -22,7 +22,7 @@ else {
 
 	<!-- Swett Alert !-->
 	<link rel = "stylesheet" href = "node_modules\sweetalert2\dist\sweetalert2.css">
-	<meta charset = "utf8">
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light container" style="background-color:#e3f2fd;">
@@ -49,8 +49,8 @@ else {
 		</div>
 	</nav>
 	<div class="container" >
-		<div class="row mt-5">
-			<div class="col col-md-12">
+		<div class="row mt-5 justify-content-center">
+			<div class="col col-md-8 ">
 				<div class="row mb-2 ">
 					<div class="col col-md-2 p-0">	
 						<select class="custom-select form-control custom-select-lg mb-3 " id = "kelime_turu" onchange="kelime_tur_sec()">
@@ -137,61 +137,55 @@ else {
 					</div>
 				</div>
 				<!--  SONUÇ ALANI BİTİŞ !-->
-				<!-- SIRALAMA !-->
-				<div class="row mt-5">
-					<div class="col col-md-7" >
-						<h2>Son 24 saat klavye hızlı sıralaması</h2>
-					</div>
-				</div>
-				<div class="row " id="sonuc_tablosu">
-					<div class="col-md-7" >
-						<table class="table  table-info table-bordered table-striped">
-							<thead class="thead-dark">
-								<tr>
-									<th>#</th>
-									<th>#</th>
-									<th>Kullanıcı Adı</th>
-									<th>DKS</th>
-									<th>Test Zamanı</th>
-									<th>Kaçıncı Deneme</th>
-								</tr>
-							</thead>
-							<tbody>
-								<?php
-								$sayac = 1;
-								$sorgu = $db->query("Select *  from 
-									dks_liste INNER JOIN kullanici ON 
-									dks_liste.dks_kullanici_id = kullanici.kullanici_id
-
-									order by  dks_sonuc DESC",PDO::FETCH_ASSOC);
-								foreach ($sorgu as $gelen){
-									$gecen_sure = saat_farki($gelen['dks_tarih']);
-									
-									?>
-									<tr <?php if (isset($_SESSION['id'])) {
-										if ($_SESSION['id'] == $gelen['kullanici_id']) {
-											echo 'class = "table-warning"';
-										}
-									} ?>>
-										<td><?php echo $sayac ?></td>
-										<td align="center"><img src="avatar.jpg" width="50"></td>
-										<td><?php echo $gelen['kullanici_adi'] ?></td>
-										<td><?php echo $gelen['dks_sonuc'] ?></td>
-										<td><?php surefarkyaz($gecen_sure); ?></td>
-										<td><?php echo $gelen['tekrar'].".Deneme" ?></td>
-									</tr>
-									<?php $sayac++; } ?>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
 			</div>
-		</div>	
-	</body>
-	</html>
-	<script src="jquery.js"></script>
-	<script  src = "node_modules\sweetalert2\dist\sweetalert2.all.min.js"> </script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-	<script src="Bootstrap/js/bootstrap.min.js" ></script>
-	<script type="text/javascript" src = "js.js"></script>
+			<!-- SIRALAMA !-->
+			<div class="col col-md-4">
+				<h2>Son 24 saat klavye hızlı sıralaması</h2>
+				<table id="siralama_tablo" class="table  table-info table-bordered table-striped">
+					<thead class="thead-dark">
+						<tr>
+							<th>#</th>
+							<th>#</th>
+							<th>Kullanıcı Adı</th>
+							<th>DKS</th>
+							<th>Test Zamanı</th>
+							<th>Kaçıncı Deneme</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php
+						$sayac = 1;
+						$sorgu = $db->query("Select *  from 
+							dks_liste INNER JOIN kullanici ON 
+							dks_liste.dks_kullanici_id = kullanici.kullanici_id
+
+							order by  dks_sonuc DESC",PDO::FETCH_ASSOC);
+						foreach ($sorgu as $gelen){
+							$gecen_sure = saat_farki($gelen['dks_tarih']);
+
+							?>
+							<tr <?php if (isset($_SESSION['id'])) {
+								if ($_SESSION['id'] == $gelen['kullanici_id']) {
+									echo 'class = "table-warning"';
+								}
+							} ?>>
+							<td><?php echo $sayac ?></td>
+							<td align="center"><img src="avatar.jpg" width="50"></td>
+							<td><?php echo $gelen['kullanici_adi']." ".$gelen['kullanici_soyadi'] ?></td>
+							<td><?php echo $gelen['dks_sonuc'] ?></td>
+							<td><?php echo surefarkyaz($gecen_sure); ?></td>
+							<td><?php echo $gelen['tekrar'].".Deneme" ?></td>
+						</tr>
+						<?php $sayac++; } ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>	
+</body>
+</html>
+<script src="jquery.js"></script>
+<script  src = "node_modules\sweetalert2\dist\sweetalert2.all.min.js"> </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="Bootstrap/js/bootstrap.min.js" ></script>
+<script type="text/javascript" src = "js.js"></script>

@@ -41,11 +41,17 @@ try{
 	var sayac = 60;
 	var kelimeler;
 	var gelen_metin;
+	
+	kelime_cek();
+	oyun_olustur();
+
 	//SESSİON KONTROL ALANI
 	if (session_konrol.value == "1") {
 		giris_btn.style.display = "none";
 		giris_icon.style.display = "none";
 		kayit_icon.style.display = "none";
+		cikis_btn.style.display = "flex";
+		cikis_icon.style.display = "flex";
 	}
 	else{
 		cikis_btn.style.display = "none";
@@ -53,7 +59,7 @@ try{
 
 	}
 	giris_btn.addEventListener("click",()=>{
-		giris_yap()
+		giris_yap();
 	});
 	cikis_btn.addEventListener("click",()=>{
 		cikis_yap()
@@ -83,6 +89,9 @@ try{
 				kelime_tur_id = kelime_turu.value;
 				kelimeler = gelen_metin[kelime_tur_id]['kelime_icerik'].split(" ");
 			},
+			error:function(error,xhr){
+				console.log(eval(xhr.responseText));
+			}
 		}
 		);
 	}
@@ -93,13 +102,22 @@ try{
 			url:"Ajax/veri.php",
 			dataType:"json",
 			data:{postisim:"sonuc_kaydet",dks:Math.floor((basilan_dogrutus/5))},
+			beforeSend: function(){
+				$('#yukleme').show();
+			},
+			complete:function(){
+				$('#yukleme').hide();
+				sonuc_alani.style.display = "flex";
+				siralama_cek();
+			},
 			success:function(data){
 				if (data.durum =="basarili") {
 					
 				}
 			},
 			error:function(xhr){
-				console.log(xhr.responseText);
+				sonuc_alani.style.display = "none";
+				
 			}
 		});
 	}
@@ -211,20 +229,42 @@ try{
 				}
 			},
 			error:function(xhr,status,error){
-				Swal.fire('Başarısız','Bilinmeyen bir hata ile karşılaşıldı '+xhr.responseText,"error").then((result)=>{
+				Swal.fire('Başarısız','Bilinmeyen bir hata ile karşılaşıldı ',"error").then((result)=>{
 					giris_yap();
 				});
 			}
 		})
 		})};
-
+		function siralama_cek(){
+			$.ajax({
+				type:"POST",
+				url:"Ajax/veri.php",
+				data:{postisim:"siralama_cek"},
+				beforSend:function(){
+					$('#yukleme').show();
+				},
+				complete:function(){
+					$('#yukleme').hide();
+				},
+				success:function(data){
+					$('#siralama_tablo tbody').html(data);
+				}
+			});
+		}
 		//ÇIKIŞ YAPMA FONKSİYONU
 		function cikis_yap(){
 			$.ajax({
 				type:"POST",
 				url:'Ajax/veri.php',
 				dataType:"json",
-				data:{postisim:"kullanici_cikis",email:"kadan8080@gmail.com",sifre:"1234"},
+				data:{postisim:"kullanici_cikis"},
+				beforSend:function(){
+					$('#yukleme').show();
+				},
+				complete:function(){
+					$('#yukleme').hide();
+				},
+				timeout:3000,
 				success:function(data){
 					if (data.durum == "basarili") {
 						Swal.fire({
@@ -236,16 +276,15 @@ try{
 					//giris_btn.style.display = "none";
 					setTimeout(() =>{location.reload()},1000);
 				}
+			},error:function(){
 
 			}
 
 		});
 		}
-		kelime_cek();
-		oyun_olustur();
-
 	//DEĞİŞKEN SIFIRLAMA FONKSİYONU
 	function degisken_sifirlama(){
+		kelime_tur_id = 0;
 		hangisatir = 0;
 		kelime = 0;
 		topdegeri = 0;
@@ -254,7 +293,7 @@ try{
 		dogru_kelime = 0;
 		yanliskelime = 0;
 		basilan_toplamtus = 0;
-		sayac = 5;
+		sayac = 60;
 		sonuc_alani.style.display = "none";
 		satir.style.display = "";
 		giris_alani.style.display = "";
@@ -331,7 +370,6 @@ giris.addEventListener('keypress',function(event){
 				if(sayac -1 <= 0){
 					clearInterval(downloadTimer);
 					giris.disabled = true;
-					sonuc_alani.style.display = "flex";
 					satir.style.display = "none";
 					giris_alani.style.display = "none";
 					kelime_turu.style.display = "none";
@@ -411,6 +449,7 @@ giris.addEventListener('keypress',function(event){
 	});		
 	});
 }
+
 catch (mesaj){
 	alert(mesaj.message);
 }

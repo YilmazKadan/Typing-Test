@@ -31,14 +31,20 @@ function saat_farki($saat){
 function surefarkyaz($saat_farki){
 	if ($saat_farki['saat_farki']<=0) {
 		if ($saat_farki['dakika_farki']<=0) {
-			echo $saat_farki['saniye_farki'].=" Saniye Önce";
+			if ($saat_farki['saniye_farki']<=0) {
+				return "Az önce";
+			}
+			else{
+				return $saat_farki['saniye_farki'].=" Saniye Önce";
+			}
+			
 		}
 		else{
-			echo $saat_farki['dakika_farki'].= " Dakika Önce";
+			return $saat_farki['dakika_farki'].= " Dakika Önce";
 		}
 	}
 	else{
-		echo $saat_farki['saat_farki'].=" Saat Önce";
+		return $saat_farki['saat_farki'].=" Saat Önce";
 	}
 }
 ?>

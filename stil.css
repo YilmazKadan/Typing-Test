@@ -23,6 +23,9 @@ body{
 	
 	
 }
+ #cikis_btn,#cikis_icon{
+ 	display: none;
+ }
 .satir span{
 	font-size:30px;
 	margin-right:13px;
